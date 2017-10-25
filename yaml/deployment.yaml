@@ -1,0 +1,42 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: kube-fswatch
+  namespace: default
+  labels:
+    app: kube-fswatch
+spec:
+  revisionHistoryLimit: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-fswatch
+  template:
+    metadata:
+      labels:
+        app: kube-fswatch
+    spec:
+      containers:
+      - image: roffe/kube-fswatch
+        resources:
+          requests:
+            memory: 5Mi
+            cpu: 5m
+          limits:
+            memory: 15Mi
+            cpu: 70m
+        name: kube-fswatch
+        ports:
+        - name: http
+          containerPort: 8080
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+          readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            name: kube-fswatch
+            items:
+            - key: config.yaml
+              path: config.yaml

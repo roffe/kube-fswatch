@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-fswatch
+  namespace: default
+data:
+  config.yaml: |
+    message: Hello World
